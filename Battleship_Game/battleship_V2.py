@@ -224,21 +224,24 @@ def check_for_ship_sunk(row, col):
     return True
 
 
-def shoot_bullet():
+def shoot_bullet(row, col):
+    # retorna 1 si una nave fue dañada, 0 en caso contrario
     """
     Actualiza la malla y las naves basadas en donde el disparo fue realizado
     """
     global grid
     global num_of_ships_sunk
     global bullets_left
-
-    row, col = accept_valid_bullet_placement()
+    global alphabet
+    row = alphabet.find(row)
+    col = int(col)
     print('')
     print('----------------------------')
-
+    bullets_left -= 1
     if grid[row][col] == '.':
         print('Falló, no hubieron naves dañadas')
         grid[row][col] = '#'
+        return 0
     elif grid[row][col] == 'O':
         print('Acertó', end=' ')
         grid[row][col] = 'X'
@@ -247,8 +250,9 @@ def shoot_bullet():
             num_of_ships_sunk += 1
         else:
             print('Una nave recibió un disparo')
-
-    bullets_left -= 1
+        return 1
+    else:
+        return 0
 
 
 def check_for_game_over():
